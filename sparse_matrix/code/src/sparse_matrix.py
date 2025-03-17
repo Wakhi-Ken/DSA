@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 class SparseMatrix:
     def __init__(self, matrixFilePath=None, numRows=None, numCols=None):
         self.rows, self.cols, self.matrix_data = 0, 0, {}
@@ -9,7 +10,7 @@ class SparseMatrix:
         else:
             raise ValueError("You must provide either a file path or dimensions for the matrix.")
 
-#Load a sparse matrix from the specified file path.
+    # Load a sparse matrix from the specified file path.
     def load_matrix_from_file(self, filePath):
         with open(filePath) as file:
             lines = file.readlines()
@@ -37,13 +38,13 @@ class SparseMatrix:
                 except ValueError as e:
                     raise ValueError(f"Error parsing line '{line}': {e}")
 
-#Return the value at the specified row and column, defaulting to zero if not set.
+    # Return the value at the specified row and column, defaulting to zero if not set.
     def getElement(self, currRow, currCol):
         if not (0 <= currRow < self.rows and 0 <= currCol < self.cols):
             raise ValueError("Row or column index out of bounds.")
         return self.matrix_data.get((currRow, currCol), 0)
 
-#Set the value at the specified row and column in the sparse matrix.
+    # Set the value at the specified row and column in the sparse matrix.
     def setElement(self, currRow, currCol, value):
         if not (0 <= currRow < self.rows and 0 <= currCol < self.cols):
             raise ValueError("Row or column index out of bounds.")
@@ -53,23 +54,16 @@ class SparseMatrix:
         elif (currRow, currCol) in self.matrix_data:
             del self.matrix_data[(currRow, currCol)]
 
-#Add another sparse matrix to this one and return the result.
+    # Add another sparse matrix to this one and return the result.
     def add(self, next):
-        if self.rows != next.rows or self.cols != next.cols:
-            raise ValueError("Matrices must have the same dimensions for addition.")
-
         result = SparseMatrix(numRows=self.rows, numCols=self.cols)
 
         for (row, col), value in self.matrix_data.items():
             result.setElement(row, col, value + next.getElement(row, col))
 
-        for (row, col), value in next.matrix_data.items():
-            if (row, col) not in self.matrix_data:
-                result.setElement(row, col, value)
-
         return result
 
-#Subtract another sparse matrix from this one and return the result.
+    # Subtract another sparse matrix from this one and return the result.
     def subtract(self, next):
         if self.rows != next.rows or self.cols != next.cols:
             raise ValueError("Matrices must have the same dimensions for subtraction.")
@@ -77,7 +71,7 @@ class SparseMatrix:
         result = SparseMatrix(numRows=self.rows, numCols=self.cols)
 
         for (row, col), value in self.matrix_data.items():
-         result.setElement(row, col, value - next.getElement(row, col))
+            result.setElement(row, col, value - next.getElement(row, col))
 
         for (row, col), value in next.matrix_data.items():
             if (row, col) not in self.matrix_data:
@@ -85,10 +79,10 @@ class SparseMatrix:
 
         return result
 
-#Multiply this sparse matrix by another and return the resulting matrix.
+    # Multiply this sparse matrix by another and return the resulting matrix.
     def multiply(self, next):
         if self.cols != next.rows:
-         raise ValueError("The number of columns in the first matrix must equal the number of rows in the second.")
+            raise ValueError("The number of columns in the first matrix must equal the number of rows in the second.")
 
         result = SparseMatrix(numRows=self.rows, numCols=next.cols)
 
@@ -101,24 +95,24 @@ class SparseMatrix:
 
         return result
         
-        return result
-
-#Print the sparse matrix in a human-readable format.
+    # Print the sparse matrix in a human-readable format.
     def easy_to_get(self):
         for row in range(self.rows):
             row_elements = []
-        for col in range(self.cols):
-            value = self.getElement(row, col)
-            row_elements.append(f"({row}, {col}, {value})")
-        print(" ".join(row_elements))
+            for col in range(self.cols):
+                value = self.getElement(row, col)
+                row_elements.append(f"({row}, {col}, {value})")
+            print(" ".join(row_elements))
 
 def main():
     # Prompt user for the action
     action = input("Enter action (Add, Subtract, Multiply): ").strip().lower()
 
     # Define file paths for the matrices
-    matrix1_path = 'sample_inputs/easy_sample_01_2.txt'
-    matrix2_path = 'sample_inputs/easy_sample_01_3.txt'
+    matrix1_path = '../../sample_inputs/easy_sample_01_2.txt'
+    matrix2_path = '../../sample_inputs/easy_sample_01_3.txt' 
+   # matrix1_path = 'sample_inputs/easy_sample_01_2.txt'
+   # matrix2_path = 'sample_inputs/easy_sample_01_3.txt'
 
     try:
         # Load the sparse matrices from the specified files
